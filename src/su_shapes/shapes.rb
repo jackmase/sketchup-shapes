@@ -104,23 +104,31 @@ module CommunityExtensions::Shapes
   # Checks if this script file has been loaded before in this SU session
   unless file_loaded?(__FILE__) # If not, create menu entries
     add_separator_to_menu("Draw")
-    # shapes_menu = UI.menu("Draw").add_submenu("3D Shapes")
-    # shapes_menu.add_item("Box") { Box.new }
-    # shapes_menu.add_item("Cylinder") { Cylinder.new }
-    # shapes_menu.add_item("Cone") { Cone.new }
-    # shapes_menu.add_item("Torus") { Torus.new }
-    # shapes_menu.add_item("Tube") { Tube.new }
-    # shapes_menu.add_item("Prism") { Prism.new }
-    # shapes_menu.add_item("Pyramid") { Pyramid.new }
-    # shapes_menu.add_item("Dome") { Dome.new }
-    # shapes_menu.add_item("Sphere") { Sphere.new }
-    # shapes_menu.add_item("Helix") { Helix.new }
-    # shapes_menu.add_item("Helical Ramp") { HelicalRamp.new }
-    # shapes_menu.add_item("Helical Ramp with Sides") { HelicalRampWithSides.new }
+    shapes_menu = UI.menu("Draw").add_submenu("3D Shapes")
+    shapes_menu.add_item("Box") { Box.new }
+    shapes_menu.add_item("Cylinder") { Cylinder.new }
+    shapes_menu.add_item("Cone") { Cone.new }
+    shapes_menu.add_item("Torus") { Torus.new }
+    shapes_menu.add_item("Tube") { Tube.new }
+    shapes_menu.add_item("Prism") { Prism.new }
+    shapes_menu.add_item("Pyramid") { Pyramid.new }
+    shapes_menu.add_item("Dome") { Dome.new }
+    shapes_menu.add_item("Sphere") { Sphere.new }
+    shapes_menu.add_item("Helix") { Helix.new }
+    shapes_menu.add_item("Helical Ramp") { HelicalRamp.new }
+    shapes_menu.add_item("Helical Ramp with Sides") { HelicalRampWithSides.new }
     panels_menu = UI.menu("Draw").add_submenu("Panels")
     Panels::PANEL_CONFIG.each_pair {
-      |panel_name, panel_rules|
-      panels_menu.add_item(panel_name) {Panel.new panel_rules}
+      |panel_mfg, panel_set|
+      mfg_menu = panels_menu.add_submenu(panel_mfg)
+      panel_set.each_pair {
+        |panel_name, panel_rules|
+        # panel_class = Panels.const_set(
+        #   Panels.safe_panel_name(panel_name),
+        #   Class.new(Panel)
+        # )
+        mfg_menu.add_item(panel_name) { Panel.new panel_name, panel_rules }
+      }
     }
     file_loaded(__FILE__)
   end
