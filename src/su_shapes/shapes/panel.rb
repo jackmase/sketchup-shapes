@@ -1,24 +1,38 @@
-
-require_relative '../shapes/box'
-
 module CommunityExtensions::Shapes
 
   # Generic base class for solar panel
   class Panel < Box
 
-    def initialize panel_rules
-
+    def initialize panel_name, panel_rules
+      @panel_name = panel_name
       @short_side_mounting = panel_rules['short_side_mounting']
       @weight = panel_rules['weight']
       dims = panel_rules['dimensions']
+      dims_hash = {
+        "width" => dims[0],
+        "depth" => dims[1],
+        "height" => dims[2]
+      }
+      super dims_hash
+    end
 
-      super dims
+    # override base class method
+    def short_class_name
+      @panel_name
     end
 
   end
 
   module Panels
     extend self
+    def safe_panel_name pname, replace_chars = [' ', '-', '/'], new_char = '_'
+      replace_chars.each {
+        |char|
+        pname = pname.gsub(char, new_char)
+      }
+      pname
+    end
+
     PANEL_CONFIG = {
       "Longi" => {
         "Longi LR6 60HPB 310M" => {
